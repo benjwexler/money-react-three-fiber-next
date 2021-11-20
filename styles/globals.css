@@ -1,16 +1,130 @@
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-}
+:root {
+  --text-size-adjust: 286%;
+ }
 
-a {
-  color: inherit;
-  text-decoration: none;
+@font-face {
+  font-family: 'Adjusted Arial';
+  size-adjust: 113%; 
+  src: local(Arial);
 }
 
 * {
   box-sizing: border-box;
+  /* font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",sans-serif; */
+  font-family: 'Merriweather', 'adjusted apple system';
 }
+
+#__next {
+  height: 100%;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+ 
+}
+
+h1, h2 {
+  margin-block-start: auto;
+  margin-block-end: auto;
+}
+
+body {
+  background: black;
+
+}
+
+#root {
+  overflow: auto;
+}
+
+p {
+  line-height: 30px;
+}
+
+.note {
+  margin-left: auto;
+  margin-right: clamp(20px, 7.1825vw, 125px);
+  margin-top: 100vh;
+  width: 500px;
+  max-width: 100%;
+  border-radius: 5px;
+  background: rgb(1 4 9 / 87%);
+  color: white;
+  padding: 20px 40px;
+  box-sizing: border-box;
+}
+
+.text-title {
+  box-sizing: border-box;
+  font-size: 36px;
+}
+
+.text-subtitle {
+  margin: 10px 0;
+  font-size: 20px;
+  line-height: 27px;
+}
+
+.canvas {
+  top: 0 !important;
+  left: 0 !important;
+  position: fixed !important;
+  z-index: -1 !important;
+}
+
+canvas {
+  position: fixed !important;
+  z-index: -1 !important;
+  
+}
+
+.sidebar {
+  height: 100vh;
+  width: 50vw;
+  left: 0;
+  top: 0;
+  background: black;
+  padding: 80px 80px 80px 80px;
+  box-sizing: border-box;
+  color: white;
+  position: fixed;
+  font-size: 18px;
+  overflow: auto;
+}
+
+.title-container {
+  color: white;
+  width: 100%;
+  margin: 0 auto;
+  top: 0;
+  position: absolute;
+}
+
+.page1-title-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 30px 10px;
+  border-radius: 4px;
+  box-sizing: border-box;
+  max-width: 1200px;
+  margin: auto;
+  margin-top: 80px;
+}
+
+.title {
+  font-size: clamp(19px, 5.78vw, 44px);
+  padding-bottom: 5px;
+}
+
+.creator {
+  font-size: clamp(16px, 5vw, 24px);
+  color: #31d192;
+}
+
