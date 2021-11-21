@@ -1,9 +1,10 @@
 import '../styles/globals.css'
 
-import React, { useRef, useState, Suspense, useEffect } from 'react'
+import React, { useRef, useState, Suspense, useEffect, useLayoutEffect } from 'react'
 import Head from 'next/head'
 import dynamic from 'next/dynamic'
-
+import {a, useSpring, config} from '@react-spring/web';
+useLayoutEffect
 import { Canvas, useFrame, useLoader } from '@react-three/fiber'
 import { useTexture } from '@react-three/drei'
 import * as THREE from "three";
@@ -11,6 +12,7 @@ import testVertexShader from '../src/shaders/vertex.glsl';
 import testFragmentShader from '../src/shaders/fragment.glsl';
 import Note from '../src/components/Note';
 import Sidebar from '../src/components/Sidebar';
+import debounce from 'lodash.debounce';
 
 export function degrees_to_radians(degrees) {
   var pi = Math.PI;
@@ -101,28 +103,55 @@ function DollarBill({
   )
 }
 
-export function Scroll({ noteRef, setShouldShowSidebar }) {
+export function Scroll({ noteRef, noteRef2, setShouldShowSidebar, setNoteToDisplay }) {
   const scrollPercentage = useRef(0);
 
-  useEffect(() => {
-    window.addEventListener('scroll', () => {
-      if (!noteRef ?.current) return;
-      //get the element
-      var elem = noteRef.current
-      //get the distance scrolled on body (by default can be changed)
-      var distanceScrolled = document.body.scrollTop;
-      //create viewport offset object
-      var elemRect = elem.getBoundingClientRect();
-      //get the offset from the element to the viewport
-      var elemViewportOffset = elemRect.top;
-      //add them together
-      var totalOffset = distanceScrolled + elemViewportOffset;
+  const checkIfElemHasPastViewport = (elem, shouldSetScrollPercentage) => {
+    // console.log('elem', elem)
+    if (!elem) return;
+    //get the element
+    // var elem = noteRef.current
+    //get the distance scrolled on body (by default can be changed)
+    var distanceScrolled = document.body.scrollTop;
+    //create viewport offset object
+    var elemRect = elem.getBoundingClientRect();
+   
+    // console.log('elemRect', elemRect)
+    //get the offset from the element to the viewport
+    var elemViewportOffset = elemRect.top;
+    //add them together
+    var totalOffset = distanceScrolled + elemViewportOffset;
+    // console.log('totalOffset', totalOffset, elem)
+    let _scrollPercentage;
+    _scrollPercentage = totalOffset / window.innerHeight
+    _scrollPercentage = _scrollPercentage < 0 ? 0 : _scrollPercentage
+    _scrollPercentage = 1 - _scrollPercentage;
+    if(shouldSetScrollPercentage) scrollPercentage?.current = _scrollPercentage;
 
-      scrollPercentage.current = totalOffset / window.innerHeight
-      scrollPercentage.current = scrollPercentage.current < 0 ? 0 : scrollPercentage.current
-      scrollPercentage.current = 1 - scrollPercentage.current;
-      setShouldShowSidebar(scrollPercentage.current >= 1)
+    return _scrollPercentage;
+
+    // setShouldShowSidebar(scrollPercentage.current >= 1)
+  }
+
+  const refs = [noteRef?.current, noteRef2?.current]
+
+  useEffect(() => {
+    window.addEventListener('scroll', debounce(() => {
+      const index = refs.findIndex((elem, i) => !(checkIfElemHasPastViewport(elem) >= 1));
+      // console.log('index', index)
+      let note = index < 0 ? refs.length : index;
+      setNoteToDisplay(note)
+
+
+
+    }, 17, {leading: true}), true)
+
+    window.addEventListener('scroll', () => {
+      const shouldShow = checkIfElemHasPastViewport(noteRef?.current, true) >= 1
+      setShouldShowSidebar(shouldShow)
     }, true)
+
+    
   }, [])
 
   useFrame(({ camera }) => {
@@ -152,14 +181,63 @@ export function TextHighlight({ children }) {
 export default function App(props) {
   const [count, setCount] = useState(0)
   const noteRef = useRef();
+  const noteRef2 = useRef();
 
   const [shouldShowSidebar, setShouldShowSidebar] = useState(false);
+
+  const [noteToDisplay, setNoteToDisplay] = useState(0);
 
   useEffect(() => {
     setInterval(() => setCount(prevCount => prevCount + 1), 50)
   }, [])
 
-  const scrollProps = { noteRef, setShouldShowSidebar };
+  const scrollProps = { noteRef, noteRef2, setShouldShowSidebar, setNoteToDisplay };
+  const [shouldReset, setShouldReset] = useState(true);
+
+  useEffect(() => {
+    setShouldReset(false)
+  }, [shouldReset])
+
+  const springProps = useSpring({
+    to: { opacity: 1 },
+    from: { opacity: 0 },
+    config: { ...config.molasses, duration: 650 },
+    // delay: 500,
+
+    reset: shouldReset,
+  })
+
+
+  useLayoutEffect(() => {
+    setShouldReset(true)
+  }, [noteToDisplay])
+
+  const getSidebarContent = () => {
+    if(shouldReset) return null;
+
+    switch (noteToDisplay) {
+      case 1:
+        return (
+          <>
+          <h2>Some Headline</h2>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </>
+        )
+        case 2:
+        
+        return (
+          <>
+          <h2>Blah</h2>
+          <p>Blah Blah sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          <p>Lorem ipsum dolor sit blah, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </>
+        )
+      default:
+        return null;
+    }
+
+  }
 
   return (
     <>
@@ -200,18 +278,19 @@ export default function App(props) {
       <Note _ref={noteRef} title='Rising Prices'>
         Prices rose by <TextHighlight>6.2 per cent</TextHighlight> compared to a year ago.
     </Note>
-      <Note title='Rising Prices'>
+      <Note _ref={noteRef2} title='Note 2'>
         Prices rose by <TextHighlight>6.2 per cent</TextHighlight> compared to a year ago.
     </Note>
-      <Note title='Rising Prices'>
+      <Note title='Note 3'>
         Prices rose by <TextHighlight>6.2 per cent</TextHighlight> compared to a year ago.
     </Note>
 
 
       <Sidebar shouldShowSidebar={shouldShowSidebar}>
-        <h2>Some Headline</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      <a.div style={springProps}>
+          {getSidebarContent()}
+      </a.div>
+
       </Sidebar>
 
     </>
