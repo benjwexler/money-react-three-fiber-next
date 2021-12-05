@@ -1,10 +1,21 @@
 
-export default function Sidebar({ shouldShowSidebar, children }) {
+import {useEffect, useRef} from 'react';
+import cx from 'classnames';
+
+export default function Sidebar({ shouldShowSidebar, children, contentId, className }) {
+
+  const ref = useRef();
+
+  useEffect(() => {
+    ref?.current?.scrollTop = 0;
+  }, [contentId]);
+
   return (
-    <div style={{
+    <div ref={ref}
+      style={{
       transform: `translateX(${shouldShowSidebar ? 0 : -100}%)`,
       transition: `${shouldShowSidebar ? 500 : 0}ms transform ease`,
-    }} className="sidebar">
+    }} className={cx("sidebar", className)}>
       {children}
     </div>
 

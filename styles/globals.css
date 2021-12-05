@@ -2,6 +2,15 @@
   --text-size-adjust: 286%;
  }
 
+ a {
+  color: inherit; /* blue colors for links too */
+  text-decoration: inherit; /* no underline */
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
 @font-face {
   font-family: 'Adjusted Arial';
   size-adjust: 113%; 
@@ -29,6 +38,10 @@ body,
  
 }
 
+.invisible {
+  visibility: hidden;
+}
+
 h1, h2 {
   margin-block-start: auto;
   margin-block-end: auto;
@@ -51,14 +64,16 @@ p {
   margin-left: auto;
   margin-right: clamp(20px, 7.1825vw, 125px);
   margin-top: 100vh;
-  width: 500px;
-  max-width: 100%;
+  max-width: 500px;
+  /* max-width: 100%; */
   border-radius: 5px;
   background: rgb(1 4 9 / 87%);
   color: white;
   padding: 20px 40px;
   box-sizing: border-box;
 }
+
+
 
 .text-title {
   box-sizing: border-box;
@@ -99,7 +114,13 @@ canvas {
   overflow: auto;
 }
 
-@keyframes fade-in {
+.sidebar-mobile {
+  display: none;
+  padding: 30px 60px;
+  margin: 350px 0;
+}
+
+/* @keyframes fade-in {
   from {opacity: 0;}
   to {opacity: 1;}
 }
@@ -107,7 +128,7 @@ canvas {
 .sidebar-content, .sidebar-content2 {
   opacity: 0;
   animation: fade-in 1000ms forwards ease;
-}
+} */
 
 .title-container {
   color: white;
@@ -115,6 +136,7 @@ canvas {
   margin: 0 auto;
   top: 0;
   position: absolute;
+  display: flex;
 }
 
 .page1-title-container {
@@ -123,15 +145,17 @@ canvas {
   flex-direction: column;
   /* padding: 30px 10px; */
   padding: 30px 0;
+  
   border-radius: 4px;
   box-sizing: border-box;
   max-width: 1200px;
   margin: auto;
   margin-top: 80px;
+  
 }
 
 .title {
-  font-size: clamp(19px, 5.78vw, 44px);
+  font-size: clamp(27px, 5.78vw, 44px);
   padding-bottom: 5px;
 }
 
@@ -139,4 +163,81 @@ canvas {
   font-size: clamp(16px, 5vw, 24px);
   color: #31d192;
 }
+
+@media only screen and (max-width: 1300px) {
+  .sidebar {
+    width: 100vw;
+    height: auto;
+    position: relative;
+    
+  }
+
+  .sidebar-desktop {
+    display: none;
+  }
+
+  .sidebar-mobile {
+    display: block;
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .note {
+    margin-right: auto;
+    max-width: 100%;
+    width: 500px;
+    margin-top: 0px;
+   
+  }
+
+  .note-first {
+    margin-top: 100vh;
+  }
+
+  
+
+  .page1-title-container {
+    margin-left: auto !important;
+    padding-left: 60px;
+  }
+
+  .text-title {
+    font-size: 27px;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+
+  .page1-title-container {
+    padding-left: 40px;
+  }
+
+  .sidebar-mobile {
+    padding: 30px 40px;
+    margin: 250px auto;
+  }
+
+  
+
+}
+
+@media only screen and (max-width: 700px) {
+
+  .page1-title-container {
+    padding-left: 20px;
+  }
+
+  .sidebar-mobile {
+    padding: 30px 20px;
+  }
+
+  .note {
+    padding: 20px;
+  }
+
+  
+
+}
+
 

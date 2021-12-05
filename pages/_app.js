@@ -1,15 +1,14 @@
 import '../styles/globals.css'
 
-import React, { useRef, useState, Suspense, useEffect, useLayoutEffect } from 'react'
+import React, { useRef, useState, Suspense, useEffect } from 'react'
 
-import { a, useSpring, config } from '@react-spring/web';
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { useTexture } from '@react-three/drei'
+import { useTexture, AdaptiveDpr } from '@react-three/drei'
 import * as THREE from "three";
 import testVertexShader from '../src/shaders/vertex.glsl';
 import testFragmentShader from '../src/shaders/fragment.glsl';
 import Note from '../src/components/Note';
-import Sidebar from '../src/components/Sidebar';
+import SidebarWithContent from '../src/components/SidebarWithContent';
 import Helmet from '../src/components/Helmet';
 import debounce from 'lodash.debounce';
 
@@ -18,7 +17,7 @@ export function degrees_to_radians(degrees) {
   return degrees * (pi / 180);
 }
 
-function toScreenPosition({object, length, camera, size}) {
+function toScreenPosition({ object, length, camera, size }) {
   if (!object) return { x: 0, y: 0 }
 
   var widthHalf = 0.5 * size.width;
@@ -45,7 +44,7 @@ const OrigCameraCoords = [-2, 4, 5]
 const endCameraCoords = [2, 4, 0];
 const diffCameraCoords = OrigCameraCoords.map((coord, i) => coord - endCameraCoords[i])
 
-const cameraInfo = { position: [-2, 4, 5], fov: 30, near: 0.1, far: 100 };
+const cameraInfo = { position: [-2, 4, 5], fov: 30, near: 3, far: 15 };
 
 const createBillsArr = () => {
   const arr = []
@@ -182,35 +181,18 @@ export function Scroll({ noteRef, noteRef2, setShouldShowSidebar, setNoteToDispl
 }
 
 var vector = new THREE.Vector3();
-var isChrome = typeof window === 'undefined' ? false : !!window.chrome;
 
 export function TitlePosition({ hiddenBillRef, setTitlePosition }) {
   const { camera, size } = useThree();
-  const hasInitializedPosition = useRef(false);
 
   const updateScreenPosition = () => {
-    const { x, y } = toScreenPosition({ object: hiddenBillRef?.current, length, size, camera })
+    const { x, y } = toScreenPosition({ object: hiddenBillRef ?.current, length, size, camera })
     setTitlePosition({ x, y })
   }
 
   useFrame(() => {
-    if (!isChrome) {
-
-      if (!hasInitializedPosition.current && hiddenBillRef.current) {
-        hasInitializedPosition.current = true;
-        updateScreenPosition()
-      }
-      return
-    };
     updateScreenPosition()
   })
-
-  useEffect(() => {
-    if (isChrome) return;
-    window.addEventListener('resize', () => {
-      updateScreenPosition()
-    })
-  }, [])
 
   return null;
 }
@@ -227,7 +209,7 @@ const TitleWithHiddenCanvas = ({ children, author }) => {
   const [titlePosition, setTitlePosition] = useState({ x: 0, y: 0 })
   return (
     <>
-      {hiddenBillRef?.current ? (
+      {hiddenBillRef ?.current ? (
         <div className="title-container">
           <div className="page1-title-container" style={{ marginLeft: titlePosition.x > 60 ? titlePosition.x : 60 }}>
             <h1 className="title">{children}</h1>
@@ -253,46 +235,20 @@ const TitleWithHiddenCanvas = ({ children, author }) => {
   )
 }
 
-const getSidebarContent = ({
-  shouldReset,
-  noteToDisplay,
-}) => {
-  if (shouldReset) return null;
 
-  switch (noteToDisplay) {
-    case 1:
-      return (
-        <>
-          <h2>Some Headline</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        </>
-      )
-    case 2:
-      return (
-        <>
-          <h2>Blah</h2>
-          <p>Blah Blah sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-          <p>Lorem ipsum dolor sit blah, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        </>
-      )
-    default:
-      return null;
-  }
-}
 
 const StackedBills = () => {
   const itemsRef = useRef([]);
 
   useEffect(() => {
-     itemsRef.current = itemsRef.current.slice(0, bills.length);
+    itemsRef.current = itemsRef.current.slice(0, bills.length);
   }, []);
 
   useEffect(() => {
     let count = 0;
     const interval = setInterval(() => {
       if (count + 1 >= bills.length) clearInterval(interval)
-      itemsRef?.current[count]?.visible = true
+      itemsRef ?.current[count] ?.visible = true
       count++
     }, 50)
   }, [])
@@ -304,7 +260,7 @@ const StackedBills = () => {
           <DollarBill
             isVisible={false}
             key={i}
-            _ref={el => itemsRef.current[i] = el} 
+            _ref={el => itemsRef.current[i] = el}
             {...item}
           />
         )
@@ -313,34 +269,30 @@ const StackedBills = () => {
   )
 }
 
-export default function App(props) {
+export default function App() {
   const noteRef = useRef();
   const noteRef2 = useRef();
 
   const [shouldShowSidebar, setShouldShowSidebar] = useState(false);
   const [noteToDisplay, setNoteToDisplay] = useState(0);
   const scrollProps = { noteRef, noteRef2, setShouldShowSidebar, setNoteToDisplay };
-  const [shouldReset, setShouldReset] = useState(true);
 
-  useLayoutEffect(() => {
-    setShouldReset(true)
-  }, [noteToDisplay])
-
+  const [showChild, setShowChild] = useState(false);
+  // Wait until after client-side hydration to show
   useEffect(() => {
-    setShouldReset(false)
-  }, [shouldReset])
+    setShowChild(true);
+  }, []);
 
-  const springProps = useSpring({
-    to: { opacity: 1 },
-    from: { opacity: 0 },
-    config: { ...config.molasses, duration: 700 },
-    reset: shouldReset,
-  })
+  if (!showChild) {
+    // You can show some kind of placeholder UI here
+    return null;
+  }
+
 
   return (
     <>
       <Helmet />
-      <TitleWithHiddenCanvas author='Ben Wexler'>
+      <TitleWithHiddenCanvas author={<a href="https://www.linkedin.com/in/benjwexler/" target="_blank">Ben Wexler</a>}>
         What is Inflation?
       </TitleWithHiddenCanvas>
 
@@ -350,25 +302,29 @@ export default function App(props) {
         camera={cameraInfo}
         dpr={typeof window === 'undefined' ? 1 : Math.min(window.devicePixelRatio, 2)}
       >
+        <AdaptiveDpr pixelated />
         <Scroll {...scrollProps} />
         <StackedBills />
       </Canvas>
 
-      <Note _ref={noteRef} title='Rising Prices'>
+      <Note _ref={noteRef} title='Rising Prices' className="note-first">
         Prices rose by <TextHighlight>6.2 per cent</TextHighlight> compared to a year ago.
       </Note>
+      <SidebarWithContent shouldShowSidebar noteToDisplay={1} className="sidebar-mobile" />
+
       <Note _ref={noteRef2} title='Note 2'>
         Prices rose by <TextHighlight>6.2 per cent</TextHighlight> compared to a year ago.
       </Note>
-      <Note title='Note 3'>
+      <SidebarWithContent shouldShowSidebar noteToDisplay={2} className="sidebar-mobile" />
+      <Note title='Note 3' className="invisible">
         Prices rose by <TextHighlight>6.2 per cent</TextHighlight> compared to a year ago.
       </Note>
 
-      <Sidebar shouldShowSidebar={shouldShowSidebar}>
-        <a.div style={springProps}>
-          {getSidebarContent({ noteToDisplay, shouldReset })}
-        </a.div>
-      </Sidebar>
+
+      {showChild ? (
+        <SidebarWithContent shouldShowSidebar={shouldShowSidebar} noteToDisplay={noteToDisplay} className="sidebar-desktop" />
+      ) : null}
+
     </>
   )
 }
