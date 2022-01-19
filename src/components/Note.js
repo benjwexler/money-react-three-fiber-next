@@ -3,13 +3,15 @@ import cx from 'classnames';
 
 export default function Note({_ref, title, children, className }) {
   return (
-    <div ref={_ref} className={cx("note", className)}>
+    <div  className={cx("note", className)}>
+    <div  ref={_ref}  className="note-inner">
       <h1 className="text-title">
         {title}
       </h1>
 
       <div className="text-subtitle">
         {children}
+      </div>
       </div>
     </div>
   )

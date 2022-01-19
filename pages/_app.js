@@ -126,16 +126,30 @@ function DollarBill({
   )
 }
 
+const getPercentInViewport = (boundingRect) => {
+  if (!boundingRect) return 0;
+  const { height, top, bottom } = boundingRect;
+  const offsetAmount = 100
+  let amountInViewportTop = 1 - (-1 * ((top - offsetAmount) / height))
+  amountInViewportTop = amountInViewportTop > 1 ? 1 : amountInViewportTop < 0 ? 0 : amountInViewportTop
+  let amountInViewPortBottom = 1 - (((bottom + offsetAmount) - window.innerHeight) / height)
+  amountInViewPortBottom = amountInViewPortBottom > 1 ? 1 : amountInViewPortBottom < 0 ? 0 : amountInViewPortBottom
+  const finalVal = Math.min(amountInViewportTop, amountInViewPortBottom) * 1
+  return (finalVal < .8 ? .8 : finalVal).toFixed(1)
+}
+
 export function Scroll({ noteRef, noteRef2, setShouldShowSidebar, setNoteToDisplay }) {
   const scrollPercentage = useRef(0);
+
   const checkIfElemHasPastViewport = (elem, shouldSetScrollPercentage) => {
     if (!elem) return;
+    
 
     //get the distance scrolled on body (by default can be changed)
     var distanceScrolled = document.body.scrollTop;
     //create viewport offset object
     var elemRect = elem.getBoundingClientRect();
-
+    elem.style.opacity = getPercentInViewport(elemRect)
     //get the offset from the element to the viewport
     var elemViewportOffset = elemRect.top;
     //add them together
@@ -144,9 +158,9 @@ export function Scroll({ noteRef, noteRef2, setShouldShowSidebar, setNoteToDispl
     let _scrollPercentage;
     _scrollPercentage = totalOffset / window.innerHeight
     _scrollPercentage = _scrollPercentage < 0 ? 0 : _scrollPercentage
-    _scrollPercentage = 1 - _scrollPercentage;
+    _scrollPercentage = _scrollPercentage > 1 ? 0 : 1 - _scrollPercentage
     if (shouldSetScrollPercentage) scrollPercentage ?.current = _scrollPercentage;
-
+    
     return _scrollPercentage;
   }
 
@@ -156,7 +170,10 @@ export function Scroll({ noteRef, noteRef2, setShouldShowSidebar, setNoteToDispl
     window.addEventListener('scroll', debounce(() => {
       const shouldShow = checkIfElemHasPastViewport(noteRef ?.current, true) >= 1
       setShouldShowSidebar(shouldShow)
-      const index = refs.findIndex((elem, i) => !(checkIfElemHasPastViewport(elem) >= 1));
+      const index = refs.findIndex((elem, i) => {
+        const percentage = checkIfElemHasPastViewport(elem);
+        return !(percentage >= 1)
+      });
       let note = index < 0 ? refs.length : index;
       setNoteToDisplay(note)
     }, 16, { leading: true }), true)
@@ -293,7 +310,7 @@ export default function App() {
     <>
       <Helmet />
       <TitleWithHiddenCanvas author={<a href="https://www.linkedin.com/in/benjwexler/" target="_blank">Ben Wexler</a>}>
-        What is Inflation?
+        Intriguing Article Title
       </TitleWithHiddenCanvas>
 
       <Canvas
@@ -307,19 +324,18 @@ export default function App() {
         <StackedBills />
       </Canvas>
 
-      <Note _ref={noteRef} title='Rising Prices' className="note-first">
-        Prices rose by <TextHighlight>6.2 per cent</TextHighlight> compared to a year ago.
+      <Note _ref={noteRef} title='Note 1' className="note-first">
+        This is <TextHighlight> something</TextHighlight> we want to highlight right here.
       </Note>
       <SidebarWithContent shouldShowSidebar noteToDisplay={1} className="sidebar-mobile" />
 
       <Note _ref={noteRef2} title='Note 2'>
-        Prices rose by <TextHighlight>6.2 per cent</TextHighlight> compared to a year ago.
+      This is <TextHighlight> something</TextHighlight> we want to highlight right here.
       </Note>
       <SidebarWithContent shouldShowSidebar noteToDisplay={2} className="sidebar-mobile" />
       <Note title='Note 3' className="invisible">
-        Prices rose by <TextHighlight>6.2 per cent</TextHighlight> compared to a year ago.
+      This is <TextHighlight> something</TextHighlight> we want to highlight right here.
       </Note>
-
 
       {showChild ? (
         <SidebarWithContent shouldShowSidebar={shouldShowSidebar} noteToDisplay={noteToDisplay} className="sidebar-desktop" />

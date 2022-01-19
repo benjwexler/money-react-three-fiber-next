@@ -69,8 +69,12 @@ p {
   border-radius: 5px;
   background: rgb(1 4 9 / 87%);
   color: white;
-  padding: 20px 40px;
+ 
   box-sizing: border-box;
+}
+
+.note-inner {
+  padding: 20px 40px;
 }
 
 
@@ -164,7 +168,7 @@ canvas {
   color: #31d192;
 }
 
-@media only screen and (max-width: 1300px) {
+@media only screen and (max-width: 1400px) {
   .sidebar {
     width: 100vw;
     height: auto;
@@ -197,14 +201,23 @@ canvas {
 
   
 
+  /* .page1-title-container {
+    margin-left: auto !important;
+    padding-left: 60px;
+  } */
+
+  .text-title {
+    font-size: 27px;
+  }
+}
+
+@media only screen and (max-width: 1300px) {
+
   .page1-title-container {
     margin-left: auto !important;
     padding-left: 60px;
   }
 
-  .text-title {
-    font-size: 27px;
-  }
 }
 
 @media only screen and (max-width: 1000px) {
@@ -229,10 +242,10 @@ canvas {
   }
 
   .sidebar-mobile {
-    padding: 30px 20px;
+    padding: 20px;
   }
 
-  .note {
+  .note-inner {
     padding: 20px;
   }
 
