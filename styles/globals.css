@@ -212,8 +212,10 @@ canvas {
 }
 
 .falling-bills-section {
-  height: 100vh;
+  height: 10vh;
   width: 100vw;
+  opacity: 0 !important;
+  background: black;
   /* background: red; */
 }
 
