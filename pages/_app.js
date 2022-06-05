@@ -1,6 +1,6 @@
 import '../styles/globals.css'
 
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect, useCallback } from 'react'
 
 import { Canvas } from '@react-three/fiber'
 import { AdaptiveDpr } from '@react-three/drei'
@@ -15,18 +15,37 @@ import TitleWithHiddenCanvas from '../src/components/TitleWithHiddenCanvas';
 import Scroll from '../src/components/Scroll';
 import { checkIfElemHasPastViewport } from '../src/utils';
 import { cameraInfo } from '../src/constants'
+import { useInViewport } from 'react-in-viewport';
+
+function useStateRef(processNode) {
+  const [node, setNode] = useState({});
+  const setRef = useCallback(newNode => {
+    setNode(processNode(newNode));
+  }, [processNode]);
+  return [node, setRef];
+}
 
 export default function App() {
-  const noteRef = useRef();
-  const noteRef2 = useRef();
-  const scrollingSectionRef = useRef();
-
+  const [noteRef, noteRef2, noteRef3, scrollingSectionRef ] = Array.from(Array(4)).map(() => useRef())
   const [noteToDisplay, setNoteToDisplay] = useState(0);
-  const [shouldDisplayFallingBills, setShouldDisplayFallingBills] = useState(false);
+  const [_shouldDisplayFallingBills, setShouldDisplayFallingBills] = useState(false);
+
+  const [noteRef3viewportInfo ] = [noteRef3].map(ref => {
+    return (
+      useInViewport(
+        ref,
+        {threshold: 0.1,},
+        { disconnectOnLeave: false },
+      )
+    );
+  })
+
+  const shouldDisplayFallingBills = _shouldDisplayFallingBills && !noteRef3viewportInfo?.inViewport;
+
   const [_shouldShowSidebar, setShouldShowSidebar] = useState(false);
   const shouldShowSidebar = _shouldShowSidebar && !shouldDisplayFallingBills
   const handleScroll = () => {
-    const isFallingSectionInViewport = !!checkIfElemHasPastViewport(scrollingSectionRef ?.current)
+    const isFallingSectionInViewport = !!checkIfElemHasPastViewport(scrollingSectionRef?.current)
     setShouldDisplayFallingBills(isFallingSectionInViewport)
   }
   const scrollProps = { noteRef, noteRef2, setShouldShowSidebar, setNoteToDisplay, scrollingSectionRef, handleScroll };
@@ -70,8 +89,8 @@ export default function App() {
       <Note _ref={noteRef2} title='Note 2'>
         This is <TextHighlight> something</TextHighlight> we want to highlight right here.
       </Note>
-      <div style={{ height: '100vh' }}>
-        <SidebarWithContent shouldShowSidebar noteToDisplay={2} className="sidebar-mobile" />
+      <div style={{ height: '100vh', marginBottom: '100vh'}}>
+        <SidebarWithContent _ref={noteRef3} style={{}} shouldShowSidebar noteToDisplay={2} className="sidebar-mobile" />
       </div>
       <Note title='Note 3' className="invisible">
         This is <TextHighlight> something</TextHighlight> we want to highlight right here.
@@ -82,7 +101,7 @@ export default function App() {
 
       <FallingBillsSection
         scrollingSectionRef={scrollingSectionRef}
-        shouldDisplayFallingBills={shouldDisplayFallingBills} 
+        shouldDisplayFallingBills={shouldDisplayFallingBills}
       />
     </>
   )

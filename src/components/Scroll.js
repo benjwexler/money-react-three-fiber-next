@@ -6,6 +6,7 @@ import * as THREE from "three";
 
 import debounce from 'lodash.debounce';
 import { checkIfElemHasPastViewport } from '../utils';
+import { useInViewport } from 'react-in-viewport';
 
 const origCameraCoords = [-2, 4, 5]
 const endCameraCoords = [2, 4, 0];
@@ -16,6 +17,30 @@ const diffCameraCoords = origCameraCoords.map((coord, i) => coord - endCameraCoo
 export default function Scroll({ noteRef, noteRef2, setShouldShowSidebar, setNoteToDisplay, handleScroll }) {
   const scrollPercentage = useRef(0);
   const refs = [noteRef?.current, noteRef2?.current]
+
+  // const viewportInfo = refs.map(ref => {
+  //   return (
+  //     useInViewport(
+  //       ref,
+  //       // options,
+  //       { disconnectOnLeave: false },
+  //       // props
+  //     )
+  //   );
+  // })
+
+  // console.log('viewportInfo', viewportInfo)
+
+  // const {
+  //   inViewport,
+  //   enterCount,
+  //   leaveCount,
+  // } = useInViewport(
+  //   myRef,
+  //   options,
+  //   config = { disconnectOnLeave: false },
+  //   props
+  // );
 
   const isFallingSectionInViewportRef = useRef();
 

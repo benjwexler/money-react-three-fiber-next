@@ -34,6 +34,7 @@ export default function FallingBillsSection({shouldDisplayFallingBills, scrollin
             background: 'black',
             opacity: .5,
             borderRadius: 5,
+            width: '100%',
           }}>
             <div style={{ visibility: 'hidden' }}>
               <h1 style={{
@@ -45,7 +46,7 @@ export default function FallingBillsSection({shouldDisplayFallingBills, scrollin
                 Created with React-Three-Fiber & React-Spring
               </h2>
               <h3 style={{ marginTop: 20 }}>
-                <a style={{ color: '#31d192' }} href="https://www.linkedin.com/in/benjwexler/" target="_blank">
+                <a style={{ color: '#31d192' }} href="https://github.com/benjwexler/money-react-three-fiber-next" target="_blank">
                   Source Code
                 </a>
               </h3>
@@ -61,6 +62,7 @@ export default function FallingBillsSection({shouldDisplayFallingBills, scrollin
             padding: 20,
             opacity: 1,
             borderRadius: 5,
+            width: '100%',
           }}>
             <h1 style={{
               fontSize: 40,
@@ -75,7 +77,7 @@ export default function FallingBillsSection({shouldDisplayFallingBills, scrollin
           </h2>
             <h3 style={{ marginTop: 20 }}>
               <TextHighlight>
-              <a href="https://www.linkedin.com/in/benjwexler/" target="_blank">
+              <a href="https://github.com/benjwexler/money-react-three-fiber-next" target="_blank">
                   Source Code
                 </a>
               </TextHighlight>
