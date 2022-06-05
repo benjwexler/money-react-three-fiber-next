@@ -15,9 +15,9 @@ varying vec2 vUv;
 
 // varying float vRandom;
 
-
+float pi = 3.1415926535897932384626433832795;
 float degrees_to_radians(float degrees){
-  float pi = 3.1415926535897932384626433832795;
+  // float pi = 3.1415926535897932384626433832795;
     return degrees * (pi / 180.0);
 }
 
@@ -29,7 +29,8 @@ void main()
   float exponent = 2.0;
   float xVal = uv.x - 0.5; 
   float zDelta = pow((uCoefficient * (xVal)), exponent);
-  modelPosition.z += zDelta;
+  modelPosition.z -= sin(pi*uv.x) * uCoefficient;
+  // modelPosition.z += zDelta;
      
 
   float adjustCoordX = uv.x - 0.5;

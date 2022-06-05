@@ -2,6 +2,24 @@
   --text-size-adjust: 286%;
  }
 
+ ::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: black;
+  
+}
+
+ ::-webkit-scrollbar-thumb {
+  /* background: #181818; */
+  
+  border-radius:5px;
+  background: #1a1a1a;
+  /* background:#676767; */
+  height: 13px; 
+}
+
  a {
   color: inherit; /* blue colors for links too */
   text-decoration: inherit; /* no underline */
@@ -75,6 +93,7 @@ p {
 
 .note-inner {
   padding: 20px 40px;
+  /* margin-top: 5px; */
 }
 
 
@@ -210,6 +229,16 @@ canvas {
     font-size: 27px;
   }
 }
+
+.falling-bills-section {
+  height: 100vh;
+  width: 100vw;
+  opacity: 0 !important;
+  background: black;
+  /* background: red; */
+}
+
+
 
 @media only screen and (max-width: 1300px) {
 
