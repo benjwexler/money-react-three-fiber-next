@@ -21,6 +21,7 @@ const DollarBill = ({
   rotation,
   uCoefficientVal = 0.0,
   startingYRotation = 0,
+  scale = 1,
 }) => {
 
   const dollarTexture = useTexture('usdollar100front.jpeg')
@@ -40,7 +41,7 @@ const DollarBill = ({
       ref={_ref}
       startingYRotation={startingYRotation}
     >
-      <planeBufferGeometry args={[1, 1, 32, 32]} />
+      <planeBufferGeometry args={[scale, scale, 32, 32]} />
       <rawShaderMaterial
         args={[{
           uniforms,

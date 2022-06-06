@@ -4,7 +4,7 @@ import { useRef, Suspense, useEffect } from 'react'
 import DollarBillStacked from './DollarBillStacked';
 import { bills } from '../constants'
 
-const StackedBills = ({ isVisible }) => {
+const StackedBills = ({ isVisible, isMobile }) => {
   const itemsRef = useRef([]);
 
   useEffect(() => {
@@ -39,6 +39,7 @@ const StackedBills = ({ isVisible }) => {
             isVisible={false}
             key={i}
             _ref={el => itemsRef.current[i] = el}
+            isMobile={isMobile}
             {...item}
           />
         )

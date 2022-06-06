@@ -137,6 +137,11 @@ canvas {
   overflow: auto;
 }
 
+#sidebar-mobile-container-last {
+  height: 100vh;
+  margin-bottom: 100vh;
+}
+
 .sidebar-mobile {
   display: none;
   padding: 30px 60px;
@@ -188,6 +193,7 @@ canvas {
 }
 
 @media only screen and (max-width: 1400px) {
+
   .sidebar {
     width: 100vw;
     height: auto;
@@ -197,6 +203,11 @@ canvas {
 
   .sidebar-desktop {
     display: none;
+  }
+
+  #sidebar-mobile-container-last {
+    height: auto;
+    margin-bottom: 0px;
   }
 
   .sidebar-mobile {
@@ -265,6 +276,10 @@ canvas {
 }
 
 @media only screen and (max-width: 700px) {
+
+  p {
+    font-size: 16px;
+  }
 
   .page1-title-container {
     padding-left: 20px;

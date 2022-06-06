@@ -18,30 +18,6 @@ export default function Scroll({ noteRef, noteRef2, setShouldShowSidebar, setNot
   const scrollPercentage = useRef(0);
   const refs = [noteRef?.current, noteRef2?.current]
 
-  // const viewportInfo = refs.map(ref => {
-  //   return (
-  //     useInViewport(
-  //       ref,
-  //       // options,
-  //       { disconnectOnLeave: false },
-  //       // props
-  //     )
-  //   );
-  // })
-
-  // console.log('viewportInfo', viewportInfo)
-
-  // const {
-  //   inViewport,
-  //   enterCount,
-  //   leaveCount,
-  // } = useInViewport(
-  //   myRef,
-  //   options,
-  //   config = { disconnectOnLeave: false },
-  //   props
-  // );
-
   const isFallingSectionInViewportRef = useRef();
 
   useEffect(() => {

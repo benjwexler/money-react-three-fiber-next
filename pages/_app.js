@@ -25,10 +25,19 @@ function useStateRef(processNode) {
   return [node, setRef];
 }
 
+const getIsMobile = (width) => {
+  return width <= 912
+};
+
 export default function App() {
   const [noteRef, noteRef2, noteRef3, scrollingSectionRef ] = Array.from(Array(4)).map(() => useRef())
   const [noteToDisplay, setNoteToDisplay] = useState(0);
   const [_shouldDisplayFallingBills, setShouldDisplayFallingBills] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => {
+    if(typeof window === 'undefined') return false;
+    return getIsMobile(window.innerWidth)
+  }
+  );
 
   const [noteRef3viewportInfo ] = [noteRef3].map(ref => {
     return (
@@ -54,6 +63,11 @@ export default function App() {
   // Wait until after client-side hydration to show
   useEffect(() => {
     setShowChild(true);
+    
+    const handleResize = () => setIsMobile(getIsMobile(window.innerWidth));
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
   }, []);
 
   if (!showChild) {
@@ -65,6 +79,7 @@ export default function App() {
     <>
       <Helmet />
       <TitleWithHiddenCanvas
+        isMobile={isMobile}
         author={<a href="https://www.linkedin.com/in/benjwexler/" target="_blank">Ben Wexler</a>}
       >
         Intriguing Article Title
@@ -78,7 +93,7 @@ export default function App() {
       >
         <AdaptiveDpr pixelated />
         <Scroll {...scrollProps} />
-        <StackedBills isVisible={!shouldDisplayFallingBills} />
+        <StackedBills isMobile={isMobile} isVisible={!shouldDisplayFallingBills} />
       </Canvas>
 
       <Note _ref={noteRef} title='Note 1' className="note-first">
@@ -89,7 +104,7 @@ export default function App() {
       <Note _ref={noteRef2} title='Note 2'>
         This is <TextHighlight> something</TextHighlight> we want to highlight right here.
       </Note>
-      <div style={{ height: '100vh', marginBottom: '100vh'}}>
+      <div id="sidebar-mobile-container-last">
         <SidebarWithContent _ref={noteRef3} style={{}} shouldShowSidebar noteToDisplay={2} className="sidebar-mobile" />
       </div>
       <Note title='Note 3' className="invisible">
