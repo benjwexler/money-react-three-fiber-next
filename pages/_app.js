@@ -14,7 +14,7 @@ import FallingBillsSection from "../src/components/FallingBillsSection";
 import StackedBills from "../src/components/StackedBills";
 import TitleWithHiddenCanvas from "../src/components/TitleWithHiddenCanvas";
 import Scroll from "../src/components/Scroll";
-import { checkIfElemHasPastViewport } from "../src/utils";
+import { checkIfElemHasPastViewport, createBillsArr } from "../src/utils";
 import { cameraInfo } from "../src/constants";
 import { useInViewport } from "react-in-viewport";
 
@@ -69,6 +69,8 @@ export default function App() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const bills = createBillsArr({ cols: isMobile ? 3 : 4 });
+
   if (!showChild) {
     // You can show some kind of placeholder UI here
     return null;
@@ -79,6 +81,7 @@ export default function App() {
       <Helmet />
       <TitleWithHiddenCanvas
         isMobile={isMobile}
+        billProps={bills[10]}
         author={
           <a href="https://www.linkedin.com/in/benjwexler/" target="_blank">
             Ben Wexler
@@ -103,6 +106,7 @@ export default function App() {
         <StackedBills
           isMobile={isMobile}
           isVisible={!shouldDisplayFallingBills}
+          bills={bills}
         />
       </Canvas>
 

@@ -7,16 +7,16 @@ export default function DollarBillStacked({
   numRow,
   numCol,
   isMobile,
-  ...restProps,
+  ...restProps
 }) {
   const spaceInBetween = isMobile ? 0.07 : 0.1;
-  const scale = isMobile ? (width / 2) : width;
-  const widthWithSpace = (scale + spaceInBetween);
-  
-  const position = { x: 0, y: 0, z: 0 }
-  position.y += ((index * height) * (isMobile ? 1.6 : 3));
-  position.z += (numRow * length * widthWithSpace) + (length / 2);
-  const x = (numCol * widthWithSpace) + (((widthWithSpace / 2) ) * (isMobile ? 1 : 1));
+  const scale = isMobile ? width / 2 : width;
+  const widthWithSpace = scale + spaceInBetween;
+
+  const position = { x: 0, y: 0, z: 0 };
+  position.y += index * height * (isMobile ? 1.6 : 3);
+  position.z += numRow * length * widthWithSpace + length / 2;
+  const x = numCol * widthWithSpace + (widthWithSpace / 2) * (isMobile ? 1 : 1);
   position.x += x;
 
   return (
@@ -26,7 +26,5 @@ export default function DollarBillStacked({
       rotation={[degrees_to_radians(270), 0, 0]}
       scale={scale}
     />
-  )
-
+  );
 }
-

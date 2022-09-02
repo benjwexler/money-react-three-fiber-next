@@ -51,10 +51,11 @@ export const checkIfElemHasPastViewport = (elem) => {
   return _scrollPercentage;
 };
 
-export const createBillsArr = () => {
+export const createBillsArr = ({ cols }) => {
   const arr = [];
   const rows = 4;
-  const cols = 4;
+  // const cols = 3;
+  // const cols = 4;
   const numBills = 10;
   let num = (numBills / 2) * -1;
   let row = (rows / 2) * -1;
