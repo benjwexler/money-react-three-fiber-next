@@ -15,7 +15,7 @@ const StackedBills = ({ isVisible, isMobile }) => {
     let count = 0;
     const interval = setInterval(() => {
       if (count + 1 >= bills.length) clearInterval(interval)
-      itemsRef ?.current[count] ?.visible = isVisible
+      itemsRef?.current[count]?.visible = isVisible
       // itemsRef?.current[count]?.isVisible = true
       count++
 
