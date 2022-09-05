@@ -3,9 +3,8 @@ import { useRef, Suspense, useEffect } from 'react'
 
 import DollarBillStacked from './DollarBillStacked';
 
-const StackedBills = ({ isVisible, isMobile, bills }) => {
+const StackedBills = ({ isVisible, bills, breakpoint }) => {
   const billsRef = useRef([]);
-
 
   useEffect(() => {
     billsRef.current = billsRef.current.slice(0, bills.length);
@@ -39,7 +38,7 @@ const StackedBills = ({ isVisible, isMobile, bills }) => {
             isVisible={false}
             key={i}
             _ref={el => billsRef.current[i] = el}
-            isMobile={isMobile}
+            breakpoint={breakpoint}
             {...item}
           />
         )

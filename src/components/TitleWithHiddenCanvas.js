@@ -48,7 +48,7 @@ export function TitlePosition({ hiddenBillRef, setTitlePosition }) {
   return null;
 }
 
-const TitleWithHiddenCanvas = ({ children, author, isMobile, billProps }) => {
+const TitleWithHiddenCanvas = ({ children, author, billProps, breakpoint }) => {
   const hiddenBillRef = useRef();
   const [titlePosition, setTitlePosition] = useState({ x: 0, y: 0 });
   return (
@@ -75,7 +75,7 @@ const TitleWithHiddenCanvas = ({ children, author, isMobile, billProps }) => {
         />
         <Suspense fallback={null}>
           <DollarBillStacked
-            isMobile={isMobile}
+            breakpoint={breakpoint}
             {...billProps}
             _ref={hiddenBillRef}
             isVisible={false}

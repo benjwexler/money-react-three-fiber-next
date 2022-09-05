@@ -18,8 +18,12 @@ import { checkIfElemHasPastViewport, createBillsArr } from "../src/utils";
 import { cameraInfo } from "../src/constants";
 import { useInViewport } from "react-in-viewport";
 
-const getIsMobile = (width) => {
-  return width <= 912;
+const getBreakpoint = (width) => {
+  if (width >= 1200) return "L";
+
+  if (width >= 700) return "M";
+
+  return "S";
 };
 
 export default function App() {
@@ -29,9 +33,10 @@ export default function App() {
   const [noteToDisplay, setNoteToDisplay] = useState(0);
   const [_shouldDisplayFallingBills, setShouldDisplayFallingBills] =
     useState(false);
-  const [isMobile, setIsMobile] = useState(() => {
+
+  const [breakpoint, setBreakpoint] = useState(() => {
     if (typeof window === "undefined") return false;
-    return getIsMobile(window.innerWidth);
+    return getBreakpoint(window.innerWidth);
   });
 
   const [noteRef3viewportInfo] = [noteRef3].map((ref) => {
@@ -63,13 +68,15 @@ export default function App() {
   useEffect(() => {
     setShowChild(true);
 
-    const handleResize = () => setIsMobile(getIsMobile(window.innerWidth));
+    const handleResize = () => {
+      setBreakpoint(getBreakpoint(window.innerWidth));
+    };
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const bills = createBillsArr({ cols: isMobile ? 3 : 4 });
+  const bills = createBillsArr({ cols: breakpoint !== "L" ? 2 : 4 });
 
   if (!showChild) {
     // You can show some kind of placeholder UI here
@@ -80,10 +87,14 @@ export default function App() {
     <>
       <Helmet />
       <TitleWithHiddenCanvas
-        isMobile={isMobile}
+        breakpoint={breakpoint}
         billProps={bills[10]}
         author={
-          <a href="https://www.linkedin.com/in/benjwexler/" target="_blank">
+          <a
+            href="https://www.linkedin.com/in/benjwexler/"
+            rel="noreferrer"
+            target="_blank"
+          >
             Ben Wexler
           </a>
         }
@@ -104,7 +115,7 @@ export default function App() {
         <AdaptiveDpr pixelated />
         <Scroll {...scrollProps} />
         <StackedBills
-          isMobile={isMobile}
+          breakpoint={breakpoint}
           isVisible={!shouldDisplayFallingBills}
           bills={bills}
         />
