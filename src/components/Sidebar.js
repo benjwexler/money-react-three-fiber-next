@@ -20,7 +20,6 @@ const mergeRefs = (...refs) => {
 export default function Sidebar({ shouldShowSidebar, children, contentId, className, _ref, style }) {
 
   const ref = useRef();
-  console.log('_ref', _ref)
   useEffect(() => {
     ref?.current?.scrollTop = 0;
   }, [contentId]);
