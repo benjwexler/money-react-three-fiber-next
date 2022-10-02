@@ -2,9 +2,20 @@ import { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { AdaptiveDpr } from "@react-three/drei";
 import ShowIf from "./ShowIf";
-import TextHighlight from "./TextHighlight";
 import FallingBills from "./FallingBills";
 import { cameraInfo } from "../constants";
+import EndCredits from "./EndCredits";
+
+const endCreditsStyle = {
+  color: "white",
+  transform: "translate(-50%, -50%)",
+  position: "absolute",
+  left: "50%",
+  top: "50%",
+  padding: 20,
+  borderRadius: 5,
+  width: "100%",
+};
 
 export default function FallingBillsSection({
   shouldDisplayFallingBills,
@@ -43,71 +54,20 @@ export default function FallingBillsSection({
         >
           <div
             style={{
-              color: "white",
-              transform: "translate(-50%, -50%)",
-              position: "absolute",
-              left: "50%",
-              top: "50%",
-              padding: 20,
+              ...endCreditsStyle,
               background: "black",
               opacity: 0.5,
-              borderRadius: 5,
-              width: "100%",
             }}
           >
-            <div style={{ visibility: "hidden" }}>
-              <h1 className="the-end">The End</h1>
-              <h2 style={{ fontSize: 24 }} className="created-with">
-                Created with React-Three-Fiber & React-Spring
-              </h2>
-              <h3 style={{ marginTop: 20 }}>
-                <a
-                  style={{ color: "#31d192" }}
-                  href="https://github.com/benjwexler/money-react-three-fiber-next"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Source Code
-                </a>
-              </h3>
-            </div>
+            <EndCredits style={{ visibility: "hidden" }} />
           </div>
 
-          <div
-            className="falling-bills-text-container"
+          <EndCredits
             style={{
-              color: "white",
-              transform: "translate(-50%, -50%)",
-              position: "absolute",
-              left: "50%",
-              top: "50%",
-              padding: 20,
+              ...endCreditsStyle,
               opacity: 1,
-              borderRadius: 5,
-              width: "100%",
             }}
-          >
-            <h1 className="the-end">The End</h1>
-            <h2
-              style={{
-                fontSize: 24,
-              }}
-              className="created-with"
-            >
-              Created with React-Three-Fiber & React-Spring
-            </h2>
-            <h3 style={{ marginTop: 20 }}>
-              <TextHighlight>
-                <a
-                  href="https://github.com/benjwexler/money-react-three-fiber-next"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Source Code
-                </a>
-              </TextHighlight>
-            </h3>
-          </div>
+          />
         </div>
       </ShowIf>
     </>

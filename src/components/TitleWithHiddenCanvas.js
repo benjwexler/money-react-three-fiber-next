@@ -4,7 +4,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import ShowIf from "./ShowIf";
 import * as THREE from "three";
 
-import { cameraInfo, bills } from "../constants";
+import { cameraInfo } from "../constants";
 import DollarBillStacked from "./DollarBillStacked";
 
 var vector = new THREE.Vector3();

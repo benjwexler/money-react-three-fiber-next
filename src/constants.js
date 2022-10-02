@@ -1,5 +1,3 @@
-import { createBillsArr } from "./utils";
-
 export const length = 2.61 / 6.14;
 export const height = 0.008;
 export const width = 1;

@@ -1,6 +1,5 @@
 
 import { useRef, Suspense, useEffect } from 'react'
-
 import DollarBillStacked from './DollarBillStacked';
 
 const StackedBills = ({ isVisible, bills, breakpoint }) => {
@@ -15,6 +14,7 @@ const StackedBills = ({ isVisible, bills, breakpoint }) => {
     const interval = setInterval(() => {
       if (count + 1 >= bills.length) clearInterval(interval);
       billsRef?.current[count]?.visible = isVisible;
+
       count++
 
     }, 50)
@@ -22,7 +22,6 @@ const StackedBills = ({ isVisible, bills, breakpoint }) => {
   }, [isVisible])
 
   useEffect(() => {
-
     billsRef.current.map((item) => {
       item.visible = isVisible
     })

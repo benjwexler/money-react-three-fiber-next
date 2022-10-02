@@ -8,10 +8,9 @@ import { width, length } from "../constants";
 import { getRandomInt, degrees_to_radians } from "../utils";
 import DollarBill from "./DollarBill";
 
-const FallingBills = ({ isVisible, scale }) => {
+const FallingBills = ({ isVisible }) => {
   const [bills, setBills] = useState([]);
   const groupRef = useRef();
-  const countRef = useRef(1);
 
   const [boundingCoords, setBoundingCoords] = useState({ x: 0, y: 0 });
 
