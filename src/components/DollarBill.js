@@ -5,13 +5,6 @@ import testVertexShader from "../../src/shaders/vertex.glsl";
 import testFragmentShader from "../../src/shaders/fragment.glsl";
 import { length } from "../constants";
 
-const _uniforms = {
-  uFrequency: { value: new THREE.Vector2(0, 9.2) },
-  uTime: { value: 0 },
-  uColor: { value: new THREE.Color("cyan") },
-  uRotation: { value: 0.0 },
-};
-
 const DollarBill = ({
   isVisible,
   _ref,
@@ -24,7 +17,7 @@ const DollarBill = ({
   const dollarTexture = useTexture("usdollar100front.jpeg");
 
   const uniforms = {
-    ..._uniforms,
+    uRotation: { value: 0.0 },
     uCoefficient: { value: uCoefficientVal },
     uTexture: { value: dollarTexture },
   };

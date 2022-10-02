@@ -64,7 +64,7 @@ export default function App() {
   };
 
   const [showChild, setShowChild] = useState(false);
-  // Wait until after client-side hydration to show
+
   useEffect(() => {
     setShowChild(true);
 
@@ -76,10 +76,12 @@ export default function App() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const bills = createBillsArr({ cols: breakpoint !== "L" ? 2 : 4 });
+  const billsWideViewport = createBillsArr({ cols: 4 });
+  const billsNarrowViewport = createBillsArr({ cols: 2 });
+
+  const isWideViewport = breakpoint === "L";
 
   if (!showChild) {
-    // You can show some kind of placeholder UI here
     return null;
   }
 
@@ -88,7 +90,9 @@ export default function App() {
       <Helmet />
       <TitleWithHiddenCanvas
         breakpoint={breakpoint}
-        billProps={bills[10]}
+        billProps={
+          (isWideViewport ? billsWideViewport : billsNarrowViewport)[10]
+        }
         author={
           <a
             href="https://www.linkedin.com/in/benjwexler/"
@@ -116,8 +120,13 @@ export default function App() {
         <Scroll {...scrollProps} />
         <StackedBills
           breakpoint={breakpoint}
-          isVisible={!shouldDisplayFallingBills}
-          bills={bills}
+          isVisible={!isWideViewport && !shouldDisplayFallingBills}
+          bills={billsNarrowViewport}
+        />
+        <StackedBills
+          breakpoint="L"
+          isVisible={isWideViewport && !shouldDisplayFallingBills}
+          bills={billsWideViewport}
         />
       </Canvas>
 
@@ -138,7 +147,6 @@ export default function App() {
       <div id="sidebar-mobile-container-last">
         <SidebarWithContent
           _ref={noteRef3}
-          style={{}}
           shouldShowSidebar
           noteToDisplay={2}
           className="sidebar-mobile"

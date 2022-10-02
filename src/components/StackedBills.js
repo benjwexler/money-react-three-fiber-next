@@ -13,9 +13,8 @@ const StackedBills = ({ isVisible, bills, breakpoint }) => {
   useEffect(() => {
     let count = 0;
     const interval = setInterval(() => {
-      if (count + 1 >= bills.length) clearInterval(interval)
-      billsRef?.current[count]?.visible = isVisible
-      // billsRef?.current[count]?.isVisible = true
+      if (count + 1 >= bills.length) clearInterval(interval);
+      billsRef?.current[count]?.visible = isVisible;
       count++
 
     }, 50)

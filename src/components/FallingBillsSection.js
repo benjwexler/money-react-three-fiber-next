@@ -65,6 +65,7 @@ export default function FallingBillsSection({
                   style={{ color: "#31d192" }}
                   href="https://github.com/benjwexler/money-react-three-fiber-next"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   Source Code
                 </a>
@@ -100,6 +101,7 @@ export default function FallingBillsSection({
                 <a
                   href="https://github.com/benjwexler/money-react-three-fiber-next"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   Source Code
                 </a>
