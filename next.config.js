@@ -1,9 +1,4 @@
 module.exports = {
-  images: {
-    loader: "akamai",
-    path: "",
-  },
-  assetPrefix: "./",
   reactStrictMode: true, // was there by default
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     config.module.rules.push(
