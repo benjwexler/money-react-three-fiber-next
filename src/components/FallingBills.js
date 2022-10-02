@@ -40,7 +40,7 @@ const FallingBills = ({ isVisible }) => {
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [camera]);
 
   const boundingY = boundingCoords.y + length / 2;
   let y = percentageToRange(boundingY, -boundingY, 0);
