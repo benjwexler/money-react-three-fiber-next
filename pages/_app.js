@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import "../styles/globals.css";
 
-import React, { useRef, useState, useEffect, useCallback } from "react";
+import React, { useRef, useState, useEffect } from "react";
 
 import { Canvas } from "@react-three/fiber";
 import { AdaptiveDpr } from "@react-three/drei";
@@ -14,8 +14,13 @@ import FallingBillsSection from "../src/components/FallingBillsSection";
 import StackedBills from "../src/components/StackedBills";
 import TitleWithHiddenCanvas from "../src/components/TitleWithHiddenCanvas";
 import Scroll from "../src/components/Scroll";
-import { checkIfElemHasPastViewport, createBillsArr } from "../src/utils";
-import { cameraInfo } from "../src/constants";
+import { checkIfElemHasPastViewport } from "../src/utils";
+import {
+  billsWideViewport,
+  billsNarrowViewport,
+  maxNumBills,
+  cameraInfo,
+} from "../src/constants";
 import { useInViewport } from "react-in-viewport";
 
 const getBreakpoint = (width) => {
@@ -24,6 +29,22 @@ const getBreakpoint = (width) => {
   if (width >= 700) return "M";
 
   return "S";
+};
+
+const useBillRenderCounter = () => {
+  const [count, setCount] = useState(0);
+  const shouldClearInterval = count >= maxNumBills;
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCount((count) => count + 1);
+    }, 50);
+
+    if (shouldClearInterval) clearInterval(interval);
+    return () => clearInterval(interval);
+  }, [shouldClearInterval]);
+
+  return count;
 };
 
 export default function App() {
@@ -76,8 +97,7 @@ export default function App() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const billsWideViewport = createBillsArr({ cols: 4 });
-  const billsNarrowViewport = createBillsArr({ cols: 2 });
+  const count = useBillRenderCounter();
 
   const isWideViewport = breakpoint === "L";
 
@@ -118,16 +138,14 @@ export default function App() {
       >
         <AdaptiveDpr pixelated />
         <Scroll {...scrollProps} />
-        <StackedBills
-          breakpoint={breakpoint}
-          isVisible={!isWideViewport && !shouldDisplayFallingBills}
-          bills={billsNarrowViewport}
-        />
-        <StackedBills
-          breakpoint="L"
-          isVisible={isWideViewport && !shouldDisplayFallingBills}
-          bills={billsWideViewport}
-        />
+
+        {!shouldDisplayFallingBills && (
+          <StackedBills
+            breakpoint={isWideViewport ? "L" : breakpoint}
+            bills={isWideViewport ? billsWideViewport : billsNarrowViewport}
+            count={count}
+          />
+        )}
       </Canvas>
 
       <Note _ref={noteRef} title="Note 1" className="note-first">
