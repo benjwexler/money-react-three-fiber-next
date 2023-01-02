@@ -88,7 +88,7 @@ export default function App() {
 
   useEffect(() => {
     setShowChild(true);
-
+    console.log("TEST GITHUB ACTION BUILD");
     const handleResize = () => {
       setBreakpoint(getBreakpoint(window.innerWidth));
     };
