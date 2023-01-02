@@ -31,18 +31,19 @@ const getBreakpoint = (width) => {
   return "S";
 };
 
-const useBillRenderCounter = () => {
+const useBillRenderCounter = (shouldRenderContent) => {
   const [count, setCount] = useState(0);
   const shouldClearInterval = count >= maxNumBills;
 
   useEffect(() => {
+    if (!shouldRenderContent) return;
     const interval = setInterval(() => {
       setCount((count) => count + 1);
     }, 50);
 
     if (shouldClearInterval) clearInterval(interval);
     return () => clearInterval(interval);
-  }, [shouldClearInterval]);
+  }, [shouldRenderContent, shouldClearInterval]);
 
   return count;
 };
@@ -97,7 +98,7 @@ export default function App() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const count = useBillRenderCounter();
+  const count = useBillRenderCounter(showChild);
 
   const isWideViewport = breakpoint === "L";
 
