@@ -14,7 +14,7 @@ import FallingBillsSection from "../src/components/FallingBillsSection";
 import StackedBills from "../src/components/StackedBills";
 import TitleWithHiddenCanvas from "../src/components/TitleWithHiddenCanvas";
 import Scroll from "../src/components/Scroll";
-import { checkIfElemHasPastViewport } from "../src/utils";
+import { checkIfElemHasPastViewport, createBillsArr } from "../src/utils";
 import {
   billsWideViewport,
   billsNarrowViewport,
@@ -46,6 +46,17 @@ const useBillRenderCounter = (shouldRenderContent) => {
   }, [shouldRenderContent, shouldClearInterval]);
 
   return count;
+};
+
+const getBillsLayout = (breakpoint) => {
+  const colsToBreakPointMap = {
+    L: 4,
+    M: 3,
+    S: 2,
+  };
+
+  const cols = colsToBreakPointMap[breakpoint];
+  return createBillsArr({ cols });
 };
 
 export default function App() {
@@ -142,8 +153,8 @@ export default function App() {
 
         {!shouldDisplayFallingBills && (
           <StackedBills
-            breakpoint={isWideViewport ? "L" : breakpoint}
-            bills={isWideViewport ? billsWideViewport : billsNarrowViewport}
+            breakpoint={breakpoint}
+            bills={getBillsLayout(breakpoint)}
             count={count}
           />
         )}
