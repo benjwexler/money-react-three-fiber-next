@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React, { useRef, useState, useEffect } from "react";
 
 import { Canvas } from "@react-three/fiber";
@@ -78,7 +79,6 @@ export default function App() {
   });
 
   const [noteRef3viewportInfo] = [noteRef3].map((ref) => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     return useInViewport(ref, { threshold: 0.1 }, { disconnectOnLeave: false });
   });
 
