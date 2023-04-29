@@ -23,6 +23,7 @@ import { useInViewport } from "react-in-viewport";
 import { Merriweather } from "next/font/google";
 
 import "../styles/globals.css";
+import InnerCanvasContextProvider from "../src/contexts/InnerCanvasContextProvider";
 
 const merriweather = Merriweather({
   subsets: ["latin"],
@@ -153,16 +154,20 @@ export default function App() {
             : Math.min(window.devicePixelRatio, 2)
         }
       >
-        <AdaptiveDpr pixelated />
-        <Scroll {...scrollProps} />
+        <InnerCanvasContextProvider>
+          <>
+            <AdaptiveDpr pixelated />
+            <Scroll {...scrollProps} />
 
-        {!shouldDisplayFallingBills && (
-          <StackedBills
-            breakpoint={breakpoint}
-            bills={getBillsLayout(breakpoint)}
-            count={count}
-          />
-        )}
+            {!shouldDisplayFallingBills && (
+              <StackedBills
+                breakpoint={breakpoint}
+                bills={getBillsLayout(breakpoint)}
+                count={count}
+              />
+            )}
+          </>
+        </InnerCanvasContextProvider>
       </Canvas>
 
       <Note _ref={noteRef} title="Note 1" className="note-first">

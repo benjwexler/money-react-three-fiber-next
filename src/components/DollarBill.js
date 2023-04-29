@@ -4,6 +4,7 @@ import * as THREE from "three";
 import testVertexShader from "../../src/shaders/vertex.glsl";
 import testFragmentShader from "../../src/shaders/fragment.glsl";
 import { length } from "../constants";
+import { useInnerCanvasContext } from "../contexts/InnerCanvasContextProvider";
 
 const DollarBill = ({
   isVisible,
@@ -14,7 +15,7 @@ const DollarBill = ({
   startingYRotation = 0,
   scale = 1,
 }) => {
-  const dollarTexture = useTexture("usdollar100front.jpeg");
+  const { dollarTexture } = useInnerCanvasContext() || {};
 
   const uniforms = {
     uRotation: { value: 0.0 },

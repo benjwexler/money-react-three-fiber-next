@@ -5,6 +5,7 @@ import ShowIf from "./ShowIf";
 import FallingBills from "./FallingBills";
 import { cameraInfo } from "../constants";
 import EndCredits from "./EndCredits";
+import InnerCanvasContextProvider from "../contexts/InnerCanvasContextProvider";
 
 const endCreditsStyle = {
   color: "white",
@@ -34,10 +35,17 @@ export default function FallingBillsSection({
             : Math.min(window.devicePixelRatio, 2)
         }
       >
-        <AdaptiveDpr pixelated />
-        <Suspense fallback={null}>
-          <FallingBills isVisible={shouldDisplayFallingBills} scale={scale} />
-        </Suspense>
+        <InnerCanvasContextProvider>
+          <>
+            <AdaptiveDpr pixelated />
+            <Suspense fallback={null}>
+              <FallingBills
+                isVisible={shouldDisplayFallingBills}
+                scale={scale}
+              />
+            </Suspense>
+          </>
+        </InnerCanvasContextProvider>
       </Canvas>
       <div ref={scrollingSectionRef} className="falling-bills-section">
         Falling Bills Section
