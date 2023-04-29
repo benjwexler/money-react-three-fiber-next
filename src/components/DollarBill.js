@@ -31,7 +31,7 @@ const DollarBill = ({
       ref={_ref}
       startingYRotation={startingYRotation}
     >
-      <planeBufferGeometry args={[scale, scale, 32, 32]} />
+      <planeGeometry args={[scale, scale, 32, 32]} />
       <rawShaderMaterial
         args={[
           {

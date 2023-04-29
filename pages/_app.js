@@ -1,13 +1,9 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-import "../styles/globals.css";
-
 import React, { useRef, useState, useEffect } from "react";
 
 import { Canvas } from "@react-three/fiber";
 import { AdaptiveDpr } from "@react-three/drei";
 import Note from "../src/components/Note";
 import SidebarWithContent from "../src/components/SidebarWithContent";
-import Helmet from "../src/components/Helmet";
 import ShowIf from "../src/components/ShowIf";
 import TextHighlight from "../src/components/TextHighlight";
 import FallingBillsSection from "../src/components/FallingBillsSection";
@@ -22,6 +18,15 @@ import {
   cameraInfo,
 } from "../src/constants";
 import { useInViewport } from "react-in-viewport";
+
+import { Merriweather } from "next/font/google";
+
+import "../styles/globals.css";
+
+const merriweather = Merriweather({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+});
 
 const getBreakpoint = (width) => {
   if (width >= 1200) return "L";
@@ -73,6 +78,7 @@ export default function App() {
   });
 
   const [noteRef3viewportInfo] = [noteRef3].map((ref) => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     return useInViewport(ref, { threshold: 0.1 }, { disconnectOnLeave: false });
   });
 
@@ -118,8 +124,7 @@ export default function App() {
   }
 
   return (
-    <>
-      <Helmet />
+    <main className={merriweather.className}>
       <TitleWithHiddenCanvas
         breakpoint={breakpoint}
         billProps={
@@ -135,7 +140,7 @@ export default function App() {
           </a>
         }
       >
-        Intriguing Article Title
+        3D Money Experiment
       </TitleWithHiddenCanvas>
 
       <Canvas
@@ -198,6 +203,6 @@ export default function App() {
         scrollingSectionRef={scrollingSectionRef}
         shouldDisplayFallingBills={shouldDisplayFallingBills}
       />
-    </>
+    </main>
   );
 }
