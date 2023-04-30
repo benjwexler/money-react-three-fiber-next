@@ -11,11 +11,10 @@ import FallingBillsSection from "../src/components/FallingBillsSection";
 import StackedBills from "../src/components/StackedBills";
 import TitleWithHiddenCanvas from "../src/components/TitleWithHiddenCanvas";
 import Scroll from "../src/components/Scroll";
-import { checkIfElemHasPastViewport, createBillsArr } from "../src/utils";
+import { checkIfElemHasPastViewport } from "../src/utils";
 import {
   billsWideViewport,
   billsNarrowViewport,
-  maxNumBills,
   cameraInfo,
 } from "../src/constants";
 import { useInViewport } from "react-in-viewport";
@@ -36,34 +35,6 @@ const getBreakpoint = (width) => {
   if (width >= 700) return "M";
 
   return "S";
-};
-
-const useBillRenderCounter = (shouldRenderContent) => {
-  const [count, setCount] = useState(0);
-  const shouldClearInterval = count >= maxNumBills;
-
-  useEffect(() => {
-    if (!shouldRenderContent) return;
-    const interval = setInterval(() => {
-      setCount((count) => count + 1);
-    }, 50);
-
-    if (shouldClearInterval) clearInterval(interval);
-    return () => clearInterval(interval);
-  }, [shouldRenderContent, shouldClearInterval]);
-
-  return count;
-};
-
-const getBillsLayout = (breakpoint) => {
-  const colsToBreakPointMap = {
-    L: 4,
-    M: 3,
-    S: 2,
-  };
-
-  const cols = colsToBreakPointMap[breakpoint];
-  return createBillsArr({ cols });
 };
 
 export default function App() {
@@ -116,8 +87,6 @@ export default function App() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const count = useBillRenderCounter(showChild);
-
   const isWideViewport = breakpoint === "L";
 
   if (!showChild) {
@@ -158,14 +127,10 @@ export default function App() {
           <>
             <AdaptiveDpr pixelated />
             <Scroll {...scrollProps} />
-
-            {!shouldDisplayFallingBills && (
-              <StackedBills
-                breakpoint={breakpoint}
-                bills={getBillsLayout(breakpoint)}
-                count={count}
-              />
-            )}
+            <StackedBills
+              breakpoint={breakpoint}
+              shouldDisplay={!shouldDisplayFallingBills}
+            />
           </>
         </InnerCanvasContextProvider>
       </Canvas>

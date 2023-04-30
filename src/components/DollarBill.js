@@ -1,4 +1,3 @@
-import { useTexture } from "@react-three/drei";
 import { animated as a } from "@react-spring/three";
 import * as THREE from "three";
 import testVertexShader from "../../src/shaders/vertex.glsl";
